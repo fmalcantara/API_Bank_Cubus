@@ -1,0 +1,48 @@
+//Listar todas as contas
+GET http://localhost:3000/contas?senha_banco=Cubos123Bank
+ 
+
+###
+//Criar um novo usuario
+POST http://localhost:3000/contas?senha_banco=Cubos123Bank
+Content-Type: application/json
+
+{
+    "nome": "juca",
+    "cpf": "888.666.666-66",
+    "data_nascimento": "10/10/2010",
+    "telefone":"9999-0000",
+    "email": "juca@gmail.com",
+    "senha": "111"
+}
+
+###
+//Editar um usuario
+PUT http://localhost:3000/contas/1/usuario/?senha_banco=Cubos123Bank
+Content-Type: application/json
+
+{
+    "nome": "Felipe",
+    "cpf": "111.222.33-44",
+    "data_nascimento": "10/10/2010",
+    "telefone":"9999-0000",
+    "email": "Felipe@gmail.com",
+    "senha": "123"
+}
+
+
+###
+//Deletar um usuario
+DELETE http://localhost:3000/contas/1/?senha_banco=Cubos123Bank
+ 
+
+
+###
+//Depositar
+POST http://localhost:3000/transacoes/depositar?senha_banco=Cubos123Bank
+Content-Type: application/json
+
+{
+    "numero_conta": 1,
+    "valor": 550.32
+}
