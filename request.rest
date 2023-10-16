@@ -1,3 +1,5 @@
+### Endpoint de Contas
+
 //Listar todas as contas
 GET http://localhost:3000/contas?senha_banco=Cubos123Bank
  
@@ -18,7 +20,7 @@ Content-Type: application/json
 
 ###
 //Editar um usuario
-PUT http://localhost:3000/contas/1/usuario/?senha_banco=Cubos123Bank
+PUT http://localhost:3000/contas/1/usuario?senha_banco=Cubos123Bank
 Content-Type: application/json
 
 {
@@ -33,16 +35,27 @@ Content-Type: application/json
 
 ###
 //Deletar um usuario
-DELETE http://localhost:3000/contas/1/?senha_banco=Cubos123Bank
+DELETE http://localhost:3000/contas/1?senha_banco=Cubos123Bank
  
 
 
-###
+### EndPoint de transações 
+
 //Depositar
 POST http://localhost:3000/transacoes/depositar?senha_banco=Cubos123Bank
 Content-Type: application/json
 
 {
     "numero_conta": 1,
-    "valor": 550.32
+    "valor": 5123.32
+}
+###
+//Sacar
+POST http://localhost:3000/transacoes/sacar?senha_banco=Cubos123Bank
+Content-Type: application/json
+
+{
+    "numero_conta": 1,
+    "valor": 3550.32,
+    "senha": "111"
 }
