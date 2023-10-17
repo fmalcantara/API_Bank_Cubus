@@ -64,7 +64,7 @@ export const criarConta = async(req, res) =>{
   }
 
   bancodedados.contas.push(conta)
-  return res.status(201).json({message: "Conta criada com sucesso", conta})
+  return res.status(201).json({message: "Conta criada com sucesso"})
     
   } catch (error) {
     res.status(500).json("Ocorreu um erro!", error.message)

@@ -1,4 +1,4 @@
-### Endpoint de Contas
+######################################## Endpoint's de Contas ###############################################
 
 //Listar todas as contas
 GET http://localhost:3000/contas?senha_banco=Cubos123Bank
@@ -9,13 +9,22 @@ GET http://localhost:3000/contas?senha_banco=Cubos123Bank
 POST http://localhost:3000/contas?senha_banco=Cubos123Bank
 Content-Type: application/json
 
+# {
+#     "nome": "Alberto",
+#     "cpf": "111.111.111-11",
+#     "data_nascimento": "10/10/2010",
+#     "telefone":"9999-0000",
+#     "email": "alberto@gmail.com",
+#     "senha": "111"
+# }
+
 {
-    "nome": "juca",
-    "cpf": "888.666.666-66",
+    "nome": "Bruno",
+    "cpf": "222.222.222-22",
     "data_nascimento": "10/10/2010",
     "telefone":"9999-0000",
-    "email": "juca@gmail.com",
-    "senha": "111"
+    "email": "bruno@gmail.com",
+    "senha": "222"
 }
 
 ###
@@ -39,15 +48,15 @@ DELETE http://localhost:3000/contas/1?senha_banco=Cubos123Bank
  
 
 
-### EndPoint de transações 
+######################################### EndPoint's de transações ########################################
 
 //Depositar
 POST http://localhost:3000/transacoes/depositar?senha_banco=Cubos123Bank
 Content-Type: application/json
 
 {
-    "numero_conta": 1,
-    "valor": 5123.32
+    "numero_conta": 2,
+    "valor": 2000
 }
 ###
 //Sacar
@@ -59,3 +68,18 @@ Content-Type: application/json
     "valor": 3550.32,
     "senha": "111"
 }
+###
+//Transferir
+POST http://localhost:3000/transacoes/transferir?senha_banco=Cubos123Bank
+Content-Type: application/json
+    
+{
+	"numero_conta_origem": 1,
+	"numero_conta_destino": 2,
+	"valor": 150,
+	"senha": "111"
+}
+
+###
+//Listar o saldo de uma conta
+GET http://localhost:3000/contas/saldo?senha_banco=Cubos123Bank&numero_conta=1&senha=333

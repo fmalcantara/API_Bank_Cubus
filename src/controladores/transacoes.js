@@ -118,5 +118,108 @@ export const sacar = (req, res) => {
       .status(500)
       .json("Ocorreu um erro:", error.message)
   }
+}
+
+export const transferir = (req, res) => {
+  const {numero_conta_origem, numero_conta_destino, valor, senha} = req.body
+  if(!numero_conta_origem){
+    return res
+      .status(404)
+      .json({message:"É necessário informar o número da conta de origem"})
+  }
+  if(!numero_conta_destino){
+    return res
+      .status(404)
+      .json({message: "É necessário informar o número da conta de destino"})
+  }
+  if(!valor){
+    return res
+      .status(404)
+      .json({message:"É necessário informar o valor da transferencia"})
+  }
+
+  if(valor<=0){
+    return res
+      .status(401)
+      .json({message: "O valor de transferencia deve ser maior que zero"})
+  }
+
+  if(!senha){
+    return res
+      .status(404)
+      .json({message:"Você precisa informar a senha desta conta para realizar esta transferencia."})
+  }
+
+  const contaOrigem = bancodedados.contas.find(c => c.numero === Number(numero_conta_origem))
+  if(!contaOrigem){
+    return res
+      .status(404)
+      .json({message: "Numero de conta de origem nao encontrado!"})
+  }
+
+  const contaDestino = bancodedados.contas.find(c=> c.numero === Number(numero_conta_destino))
+    if(!contaDestino){
+      return res 
+        .status(404)
+        .json({message: "Número de conta de destino não encontrado."})
+    }
+
+    if(contaOrigem.usuario.senha !== senha){
+      return res
+        .status(401)
+        .json({message: "A senha desta conta está incorreta."})
+    }
+
+    if(contaOrigem.saldo < valor){
+      return res
+        .status(401)
+        .json({message:"Salso insuficiente para transferencia!"})
+    }
+
+    contaOrigem.saldo = contaOrigem.saldo - valor
+    contaDestino.saldo = contaDestino.saldo + valor
+
+    const date = new Date()
+    const data = format(date, "dd:MM:yyy, HH:mm:ss")
+
+    const transferencia ={
+      data,
+      contaOrigem,
+      contaDestino,
+      valor
+    }
+
+    bancodedados.contas.push(transferencia)
+    return res
+      .status(200)
+      .send("Transferencia enviada com sucesso")
+}
+
+export const saldo=(req, res)=>{
+  const {numero_conta, senha} = req.query
+  if(!numero_conta){
+    return res
+      .status(404)
+      .json({message: "É necessário informar o numero da conta"})
+  }
+  if(!senha){
+    return res
+      .status(404)
+      .json({message: "É necessário informar a senha desta conta!"})
+  }
+
+  const conta = bancodedados.contas.find(c=>c.numero === Number(numero_conta))
+  if(!conta){
+    return res
+      .status(404)
+      .json({message:"Conta não encontrada"})
+  }
   
+  const validarSenha = bancodedados.contas.find(s=>s.usuario.senha === senha)
+  if(!validarSenha){
+    return res
+      .status(401)
+      .json({message: "A Senha desta conta é inválida."})
+  }
+  return res.status(200).json({saldo: conta.saldo})
 }
