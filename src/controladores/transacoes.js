@@ -121,6 +121,8 @@ export const sacar = (req, res) => {
 }
 
 export const transferir = (req, res) => {
+  try {
+  
   const {numero_conta_origem, numero_conta_destino, valor, senha} = req.body
   if(!numero_conta_origem){
     return res
@@ -184,19 +186,27 @@ export const transferir = (req, res) => {
 
     const transferencia ={
       data,
-      contaOrigem,
-      contaDestino,
+      numero_conta_origem,
+      numero_conta_destino,
       valor
     }
-
-    bancodedados.contas.push(transferencia)
+   
+    bancodedados.transferencias.push(transferencia)
     return res
       .status(200)
       .send("Transferencia enviada com sucesso")
+
+    } catch (error) {
+    return res
+      .status(500)
+      .json("Ocorreu um erro:", error.message)
+  }
 }
 
 export const saldo=(req, res)=>{
+  try {
   const {numero_conta, senha} = req.query
+
   if(!numero_conta){
     return res
       .status(404)
@@ -215,11 +225,65 @@ export const saldo=(req, res)=>{
       .json({message:"Conta não encontrada"})
   }
   
-  const validarSenha = bancodedados.contas.find(s=>s.usuario.senha === senha)
-  if(!validarSenha){
+  if(conta.usuario.senha !== senha){
+    return res  
+      .status(401)
+      .json({message: "Senha incorreta"})
+  }
+
+  return res.status(200).json({saldo: conta.saldo})
+  
+  } catch (error) {
+    return res
+    .json("Ocorreu um erro:", error.message)    
+  }
+}
+
+export const extrato = (req, res)=>{
+  try {
+  const {numero_conta, senha} = req.query
+    if(!numero_conta){
+      return res
+        .status(404)
+        .json({message:"Insira o numero da conta"})
+    }
+    if(!senha){
+      return res
+      .status(404)
+      .json({message:"É necessário informar a senha desta conta"})
+    }
+
+    const conta = bancodedados.contas.find(c=>c.numero === Number(numero_conta))
+    if(!conta){
+      return res
+        .status(404)
+        .json({message:"Conta não encontrada"})
+    }
+
+  if(conta.usuario.senha !==senha){
     return res
       .status(401)
-      .json({message: "A Senha desta conta é inválida."})
+      .json({message:"Senha inválida"})
   }
-  return res.status(200).json({saldo: conta.saldo})
+  
+  const depositos = bancodedados.depositos.filter(d=>d.numero_conta === +numero_conta)
+  const saques = bancodedados.saques.filter(s=>s.numero_conta === +numero_conta)
+  const transferenciasEnviadas = bancodedados.transferencias.filter(t=>t.numero_conta_origem === +numero_conta)
+  const transferenciasRecebidas = bancodedados.transferencias.filter(t=>t.numero_conta_destino === +numero_conta)
+
+  const extratoUsuario = {
+    depositos,
+    saques,
+    transferenciasEnviadas,
+    transferenciasRecebidas
+  };
+  return res
+    .status(200)
+    .json(extratoUsuario)
+  
+  } catch (error) {
+    return res
+    .status(500) 
+    .json("Ocorreu um erro:", error.message)
+  }
 }
