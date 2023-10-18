@@ -1,5 +1,6 @@
 ######################################## Endpoint's de Contas ###############################################
 
+###
 //Listar todas as contas
 GET http://localhost:3000/contas?senha_banco=Cubos123Bank
  
@@ -20,16 +21,16 @@ Content-Type: application/json
 
 {
     "nome": "Bruno",
-    "cpf": "222.222.222-22",
+    "cpf": "222.22.222-22",
     "data_nascimento": "10/10/2010",
     "telefone":"9999-0000",
-    "email": "bruno@gmail.com",
+    "email": "brun@gmail.com",
     "senha": "222"
 }
 
 ###
 //Editar um usuario
-PUT http://localhost:3000/contas/1/usuario?senha_banco=Cubos123Bank
+PUT http://localhost:3000/contas/2/usuario?senha_banco=Cubos123Bank
 Content-Type: application/json
 
 {
@@ -44,7 +45,7 @@ Content-Type: application/json
 
 ###
 //Deletar um usuario
-DELETE http://localhost:3000/contas/1?senha_banco=Cubos123Bank
+DELETE http://localhost:3000/contas/3?senha_banco=Cubos123Bank
  
 
 
@@ -64,9 +65,9 @@ POST http://localhost:3000/transacoes/sacar?senha_banco=Cubos123Bank
 Content-Type: application/json
 
 {
-    "numero_conta": 1,
-    "valor": 3550.32,
-    "senha": "111"
+    "numero_conta": 2,
+    "valor": 1300,
+    "senha": "123"
 }
 ###
 //Transferir
@@ -76,10 +77,14 @@ Content-Type: application/json
 {
 	"numero_conta_origem": 1,
 	"numero_conta_destino": 2,
-	"valor": 150,
+	"valor": 200,
 	"senha": "111"
 }
 
 ###
 //Listar o saldo de uma conta
-GET http://localhost:3000/contas/saldo?senha_banco=Cubos123Bank&numero_conta=1&senha=333
+GET http://localhost:3000/contas/saldo?senha_banco=Cubos123Bank&numero_conta=2&senha=123
+
+###
+//Listar extrato de todas as contas
+GET http://localhost:3000/contas/extrato?senha_banco=Cubos123Bank&numero_conta=2&senha=123
